@@ -6,6 +6,6 @@
 
 <summary>Kuva</summary>
 
-![image](https://github.com/PeetuVainio/Tietokanta-Projekti/assets/113332683/77fe4b27-9e50-4d92-be4c-d8cf74532409)
+![image](https://github.com/PeetuVainio/Tietokanta-Projekti/assets/113332683/4490b79f-7b13-4cb1-b2e6-e51c1786016c)
 
 </details>
