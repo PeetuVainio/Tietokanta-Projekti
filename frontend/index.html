@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data from SQLite Database</title>
+</head>
+<body>
+<form action="/action_page.php">
+    <label for="">Review:</label>
+    <select name="reviews" id="">
+        <option value=""></option>
+        <option value="Positive">Positive +</option>
+        <option value="Negative">Negative -</option>
+    </select>
+    <br><br>
+</form>
+
+<form action="/action_page.php">
+    <label for="">Restriction:</label>
+    <select name="restriction" id="">
+        <option value=""></option>
+        <option value="1">0</option>
+        <option value="2">3</option>
+        <option value="2">7</option>
+        <option value="2">12</option>
+        <option value="2">16</option>
+        <option value="2">18</option>
+    </select>
+    <br><br>
+</form>
+
+<form action="/action_page.php">
+    <label for="">Restriction:</label>
+    <select name="restriction" id="">
+        <option value="1"></option>
+        <option value="2">XBOX Controller</option>
+        <option value="3">Playstation Controller</option>
+    </select>
+    <br><br>
+</form>
+
+    <h1>Data from SQLite Database</h1>
+
+    <h2>Games</h2>
+    <ul id="game-list"></ul>
+    
+    <h2>Publishers</h2>
+    <ul id="publisher-list"></ul>
+
+    <h2>Developers</h2>
+    <ul id="developer-list"></ul>
+
+    <h2>Genres</h2>
+    <ul id="genre-list"></ul>
+
+    <h2>Reviews</h2>
+    <ul id="review-list"></ul>
+
+    <h2>Restriction</h2>
+    <ul id="restriction-list"></ul>
+
+    <h2>ControllerSupport</h2>
+    <ul id="ControllerSupport-list"></ul>
+
+    <script src="script.js"></script>
+</body>
+</html>
