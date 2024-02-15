@@ -5,33 +5,93 @@ const app = express();
 const port = 5050;
 const cors = require('cors');
 app.use(cors());
+app.use(express.json());
 
 const db = new sqlite3.Database('tietokantaprojekti.sqlite');
 
-app.get('/publisherData/:publisherId', (req, res) => {
-    const publisherId = req.params.publisherId;
+app.post('/search', (req, res) => {
+    const searchParams = req.body;
 
-    db.all('SELECT g.*, p.publisher_name, d.developer_name, r.is_positive AS review, re.restriction_value, cs.supports_controller FROM Game g LEFT JOIN Publisher p ON g.publisher_id = p.id LEFT JOIN Developer d ON g.id = d.game_id LEFT JOIN Reviews r ON g.id = r.game_id LEFT JOIN Restriction re ON g.id = re.game_id LEFT JOIN ControllerSupport cs ON g.id = cs.game_id WHERE g.publisher_id = ?', [publisherId], (err, games) => {
+    let query = 'SELECT g.*, p.publisher_name, d.developer_name, r.is_positive AS review, re.restriction_value FROM Game g';
+    query += ' LEFT JOIN Publisher p ON g.publisher_id = p.id';
+    query += ' LEFT JOIN Developer d ON g.id = d.game_id';
+    query += ' LEFT JOIN Reviews r ON g.id = r.game_id';
+    query += ' LEFT JOIN Restriction re ON g.id = re.game_id';
+    query += ' WHERE 1 = 1';
+
+    const queryParams = [];
+
+    if (searchParams.game_name) {
+        query += ' AND g.game_name LIKE ?';
+        queryParams.push(`%${searchParams.game_name}%`);
+    }
+    if (searchParams.released) {
+        query += ' AND g.released LIKE ?';
+        queryParams.push(`%${searchParams.released}%`);
+    }
+    if (searchParams.price_value) {
+        query += ' AND g.price_value LIKE ?';
+        queryParams.push(`%${searchParams.price_value}%`);
+    }
+    if (searchParams.publisher_name) {
+        query += ' AND p.publisher_name = ?';
+        queryParams.push(searchParams.publisher_name);
+    }
+    if (searchParams.developer_name) {
+        query += ' AND d.developer_name = ?';
+        queryParams.push(searchParams.developer_name);
+    }
+    if (searchParams.genre_name) {
+        query += ' AND g.id IN (SELECT game_id FROM Genre WHERE genre_name = ?)';
+        queryParams.push(searchParams.genre_name);
+    }
+    if (searchParams.review) {
+        query += ' AND r.is_positive = ?';
+        queryParams.push(searchParams.review);
+    }
+    if (searchParams.restriction_value) {
+        query += ' AND re.restriction_value = ?';
+        queryParams.push(searchParams.restriction_value);
+    }
+    if (searchParams.supports_controller) {
+        query += ' AND g.id IN (SELECT game_id FROM ControllerSupport WHERE supports_controller = ?)';
+        queryParams.push(searchParams.supports_controller);
+    }
+
+    db.all(query, queryParams, (err, games) => {
         if (err) {
             res.status(500).json({ error: 'Internal Server Error' });
             return;
         }
 
-        db.all('SELECT * FROM Genre', (err, genres) => {
+        const gameIds = games.map(game => game.id);
+        db.all(`SELECT * FROM Genre WHERE game_id IN (${gameIds.map(() => '?').join(',')})`, gameIds, (err, genres) => {
             if (err) {
                 res.status(500).json({ error: 'Internal Server Error' });
                 return;
             }
 
-            db.all('SELECT * FROM ControllerSupport', (err, controllerSupport) => {
+            db.all(`SELECT * FROM ControllerSupport WHERE game_id IN (${gameIds.map(() => '?').join(',')})`, gameIds, (err, controllerSupport) => {
                 if (err) {
                     res.status(500).json({ error: 'Internal Server Error' });
                     return;
                 }
 
+                const genreMap = genres.reduce((acc, genre) => {
+                    acc[genre.game_id] = acc[genre.game_id] || [];
+                    acc[genre.game_id].push(genre.genre_name);
+                    return acc;
+                }, {});
+
+                const controllerSupportMap = controllerSupport.reduce((acc, cs) => {
+                    acc[cs.game_id] = acc[cs.game_id] || [];
+                    acc[cs.game_id].push(cs.supports_controller);
+                    return acc;
+                }, {});
+
                 const processedGames = games.map(game => {
-                    game.genres = genres.filter(genre => genre.game_id === game.id).map(genre => genre.genre_name);
-                    game.controllerSupport = controllerSupport.filter(cs => cs.game_id === game.id);
+                    game.genres = genreMap[game.id] || [];
+                    game.controllerSupport = controllerSupportMap[game.id] || []; 
                     return game;
                 });
 
@@ -48,7 +108,6 @@ app.get('/data', (req, res) => {
             res.status(500).json({ error: 'Internal Server Error' });
             return;
         }
-
         data.games = games;
 
         db.all('SELECT * FROM Publisher', (err, publishers) => {
@@ -56,7 +115,6 @@ app.get('/data', (req, res) => {
                 res.status(500).json({ error: 'Internal Server Error' });
                 return;
             }
-
             data.publishers = publishers;
 
             db.all('SELECT * FROM Developer', (err, developers) => {
@@ -64,7 +122,6 @@ app.get('/data', (req, res) => {
                     res.status(500).json({ error: 'Internal Server Error' });
                     return;
                 }
-    
                 data.developers = developers;
 
                 db.all('SELECT * FROM Reviews', (err, reviews) => {
@@ -72,7 +129,6 @@ app.get('/data', (req, res) => {
                         res.status(500).json({ error: 'Internal Server Error' });
                         return;
                     }
-            
                     data.reviews = reviews;
 
                     db.all('SELECT * FROM Restriction', (err, restrictions) => {
@@ -80,19 +136,9 @@ app.get('/data', (req, res) => {
                             res.status(500).json({ error: 'Internal Server Error' });
                             return;
                         }
-                        
                         data.restrictions = restrictions;
                         
-                        db.all('SELECT * FROM ControllerSupport', (err, supportscontrollers) => {
-                            if (err) {
-                                res.status(500).json({ error: 'Internal Server Error' });
-                                return;
-                            }
-                        
-                            data.controllerSupport = supportscontrollers;
-                        
-                            res.json(data);
-                        });
+                        res.json(data);
                     });
                 });
             });

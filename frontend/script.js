@@ -1,71 +1,62 @@
-const fetchData = () => {
-    fetch('http://localhost:5050/data')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to fetch data');
-            }
-            return response.json();
-        })
-        .then(data => {
-            const publisherSelect = document.getElementById('publisher-select');
-            publisherSelect.innerHTML = '<option value="">Select Publisher</option>';
-            if (data.publishers && data.publishers.length > 0) {
-                data.publishers.forEach(publisher => {
-                    const option = document.createElement('option');
-                    option.value = publisher.id;
-                    option.textContent = publisher.publisher_name;
-                    publisherSelect.appendChild(option);
-                });
-            } else {
-                console.error('No publishers data found');
-            }
-        })
-        .catch(error => console.error('Error:', error));
+document.addEventListener('DOMContentLoaded', () => {
+const fetchData = (searchParams) => {
+    fetch('http://localhost:5050/search', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(searchParams)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to fetch data');
+        }
+        return response.json();
+    })
+    .then(data => {
+        displayGames(data.games);
+    })
+    .catch(error => console.error('Error:', error));
 };
 
-fetchData();
-
-document.getElementById('publisher-select').addEventListener('change', () => {
-    const selectedPublisherId = document.getElementById('publisher-select').value;
-    if (selectedPublisherId) {
-        fetch(`http://localhost:5050/publisherData/${selectedPublisherId}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to fetch data');
-                }
-                return response.json();
-            })
-            .then(data => {
-                const gameList = document.getElementById('game-list');
-                gameList.innerHTML = '';
-                const addedGames = {};
-                if (data.games && data.games.length > 0) {
-                    data.games.forEach(game => {
-                        if (!addedGames[game.id]) {
-                            const listItem = document.createElement('li');
-                            let info = `Name: ${game.game_name}, Released: ${game.released}, Price: ${game.price_value}, Publisher: ${game.publisher_name || 'N/A'}, Developer: ${game.developer_name || 'N/A'},`;
-                            
-                            const genres = game.genres ? game.genres.join(', ') : 'N/A';
-                            info += ` Genre: ${genres},`;
-                            
-                            info += ` Review: ${game.review || 'N/A'},`;
-                            
-                            info += ` Restriction: ${game.restriction_value || 'N/A'},`;
-                            
-                            const controllerSupport = game.controllerSupport ? game.controllerSupport.map(cs => cs.supports_controller).join(', ') : 'N/A';
-                            info += ` Controller Support: ${controllerSupport}`;
-                            
-                            listItem.textContent = info;
-                            gameList.appendChild(listItem);
-                            addedGames[game.id] = true;
-                        }
-                    });
-                } else {
-                    console.error('No games data found');
-                }
-            })
-            .catch(error => console.error('Error:', error));
+const displayGames = (games) => {
+    const searchResults = document.getElementById('search-results');
+    searchResults.innerHTML = '';
+    if (games && games.length > 0) {
+        games.forEach(game => {
+            const listItem = document.createElement('li');
+            let info = `Name: ${game.game_name}, Released: ${game.released}, Price: ${game.price_value}, Publisher: ${game.publisher_name || 'N/A'}, Developer: ${game.developer_name || 'N/A'}, Genre: ${game.genres.join(', ') || 'N/A'}, Review: ${game.review || 'N/A'}, Restriction: ${game.restriction_value || 'N/A'}, Controller Support: ${game.controllerSupport.join(', ') || 'N/A'}`;
+            listItem.textContent = info;
+            searchResults.appendChild(listItem);
+        });
     } else {
-        fetchData();
+        searchResults.innerHTML = '<li>No results found</li>';
     }
+};
+
+    document.getElementById('search-btn').addEventListener('click', () => {
+        const gameName = document.getElementById('game-name').value;
+        const released = document.getElementById('released').value;
+        const price = document.getElementById('price').value;
+        const publisher = document.getElementById('publisher').value;
+        const developer = document.getElementById('developer').value;
+        const genre = document.getElementById('genre').value;
+        const review = document.getElementById('review').value;
+        const restriction = document.getElementById('restriction').value;
+        const controllerSupport = document.getElementById('controller-support').value;
+
+        const searchParams = {
+            game_name: gameName,
+            released: released,
+            price_value: price,
+            publisher_name: publisher,
+            developer_name: developer,
+            genre_name: genre,
+            review: review,
+            restriction_value: restriction,
+            supports_controller: controllerSupport
+        };
+
+        fetchData(searchParams);
+    });
 });

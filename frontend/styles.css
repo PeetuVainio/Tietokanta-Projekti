@@ -1,0 +1,20 @@
+.search {
+    background-color: rgb(235, 235, 235);
+    width: 500px;
+    text-align: center;
+    border-radius: 10px;
+    border-style: solid;
+}
+
+.searchBox {
+    width: 200px;
+}
+
+.searchButton {
+    margin: 5px;
+    background-color: azure;
+    border-radius: 5px;
+    padding: 5px;
+    border-color: rgb(167, 167, 167);
+    outline: none;
+}

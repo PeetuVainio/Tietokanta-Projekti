@@ -3,34 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data from SQLite Database</title>
+    <title>Search Games</title>
+    <link rel="stylesheet" href="../frontend/styles.css">
 </head>
 <body>
-    <h1>Data from SQLite Database</h1>
+    <h1>Search Games</h1>
 
-    <h2>Games</h2>
-    <ul id="game-list"></ul>
-    
-    <h2>Publishers</h2>
-    <select id="publisher-select">
-        <option value="">Select Publisher</option>
-    </select>
-    <ul id="publisher-list"></ul>
+    <div class="search">
+    <label for="game-name">Game Name:</label><br>
+    <input type="text" id="game-name" class="searchBox"><br>
 
-    <h2>Developers</h2>
-    <ul id="developer-list"></ul>
+    <label for="released">Released:</label><br>
+    <input type="text" id="released" class="searchBox"><br>
 
-    <h2>Genres</h2>
-    <ul id="genre-list"></ul>
+    <label for="price" class=>Price:</label><br>
+    <input type="text" id="price" class="searchBox"><br>
 
-    <h2>Reviews</h2>
-    <ul id="review-list"></ul>
+    <label for="publisher">Publisher:</label><br>
+    <input type="text" id="publisher" class="searchBox"><br>
 
-    <h2>Restriction</h2>
-    <ul id="restriction-list"></ul>
+    <label for="developer">Developer:</label><br>
+    <input type="text" id="developer" class="searchBox"><br>
 
-    <h2>ControllerSupport</h2>
-    <ul id="controllerSupport-list"></ul>
+    <label for="genre">Genre:</label><br>
+    <select id="genre" class="searchBox">
+        <option value=""></option>
+        <option value="Adventure">Adventure</option>
+        <option value="Action">Action</option>
+        <option value="Casual">Casual</option>
+        <option value="Indie">Indie</option>
+        <option value="RPG">RPG</option>
+        <option value="Simulation">Simulation</option>
+        <option value="Free to Play">Free to Play</option>
+    </select><br>
+
+    <label for="review">Review:</label><br>
+    <select id="review" class="searchBox">
+        <option value=""></option>
+        <option value="Positive">Positive</option>
+        <option value="Negative">Negative</option>
+    </select><br>
+
+    <label for="restriction">Restriction:</label><br>
+    <select id="restriction" class="searchBox">
+        <option value=""></option>
+        <option value="not rated">not rated</option>
+        <option value="3">3</option>
+        <option value="7">7</option>
+        <option value="12">12</option>
+        <option value="16">16</option>
+        <option value="18">18</option>
+    </select><br>
+
+    <label for="controller-support">Controller Support:</label><br>
+    <select id="controller-support" class="searchBox">
+        <option value=""></option>
+        <option value="XBOX Controller">XBOX Controller</option>
+        <option value="PlayStation Controller">PlayStation Controller</option>
+    </select><br>
+
+    <button id="search-btn" class="searchButton">Search</button>
+
+</div>
+
+    <h2>Results</h2>
+    <ul id="search-results"></ul>
 
     <script src="script.js"></script>
 </body>
