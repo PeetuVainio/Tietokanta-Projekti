@@ -18,3 +18,13 @@
     border-color: rgb(167, 167, 167);
     outline: none;
 }
+
+.panel-switch-button {
+    margin: 5px;
+    background-color: rgb(145, 255, 160);
+    border-radius: 5px;
+    padding: 5px;
+    border-color: rgb(156, 156, 156);
+    outline: none;
+    font-weight: 600;
+}

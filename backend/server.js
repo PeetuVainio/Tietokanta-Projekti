@@ -9,6 +9,22 @@ app.use(express.json());
 
 const db = new sqlite3.Database('tietokantaprojekti.sqlite');
 
+app.delete('/remove/:id', (req, res) => {
+    const id = req.params.id;
+
+    db.run('DELETE FROM Game WHERE id = ?', id, function(err) {
+        if (err) {
+            console.error(err.message);
+            res.status(500).json({ error: 'Internal Server Error' });
+            return;
+        }
+
+        console.log(`Data with ID ${id} has been successfully removed`);
+        res.sendStatus(200);
+    });
+});
+
+
 app.post('/search', (req, res) => {
     const searchParams = req.body;
 
