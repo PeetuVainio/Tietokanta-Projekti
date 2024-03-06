@@ -10,4 +10,5 @@
 
 </details>
 
-- Voit hakea SQLite tietokannasta tietoa eri taulujen ja niiden sarakkeiden tietojen perusteella. Projektissa on käyttetty JavaScript, HTML ja css. 
+- Voit hakea SQLite tietokannasta tietoa eri taulujen ja niiden sarakkeiden tietojen perusteella. Projektissa on käyttetty JavaScript, HTML ja css.
+- Voit myös lisätä ja poistaa tietoja eri välilehdiltä.
