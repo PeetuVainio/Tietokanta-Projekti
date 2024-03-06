@@ -18,9 +18,8 @@
         <button class="panel-switch-button">Remove</button>
     </a>
 
-    <h1>Add Game</h1>
-
-    <form id="addForm">
+    <form id="addForm" class="forms">
+        <h1>Add Game</h1>
         <label for="game_name">Game Name:</label>
         <input type="text" id="game_name" name="game_name" required><br><br>
 
@@ -33,48 +32,44 @@
         <label for="publisher_id">Publisher ID:</label>
         <input type="number" id="publisher_id" name="publisher_id" required><br><br>
 
-        <input type="submit" value="Add Game">
+        <input type="submit" value="Add Game" class="addBTN">
     </form>
 
-    <h1>Add Publisher</h1>
-
-    <form id="addPublisherForm">
+    <form id="addPublisherForm" class="forms">
+        <h1>Add Publisher</h1>
         <label for="publisher_name">Publisher Name:</label>
         <input type="text" id="publisher_name" name="publisher_name" required><br><br>
 
         <label for="publisher_id">Publisher ID:</label>
         <input type="number" id="publisher_id" name="publisher_id" required><br><br>
 
-        <input type="submit" value="Add Publisher">
+        <input type="submit" value="Add Publisher" class="addBTN">
     </form>
 
-    <h1>Add Developer</h1>
-
-    <form id="addDeveloperForm">
+    <form id="addDeveloperForm" class="forms">
+        <h1>Add Developer</h1>
         <label for="developer_name">Developer Name:</label>
         <input type="text" id="developer_name" name="developer_name" required><br><br>
 
         <label for="game_id">Game ID:</label>
         <input type="number" id="game_id" name="game_id" required><br><br>
 
-        <input type="submit" value="Add Developer">
+        <input type="submit" value="Add Developer" class="addBTN">
     </form>
 
-    <h1>Add Genre</h1>
-
-    <form id="addGenreForm">
+    <form id="addGenreForm" class="forms">
+        <h1>Add Genre</h1>
         <label for="genre_name">Genre Name:</label>
         <input type="text" id="genre_name" name="genre_name" required><br><br>
 
         <label for="game_id">Game ID:</label>
         <input type="number" id="game_id" name="game_id" required><br><br>
 
-        <input type="submit" value="Add Genre">
+        <input type="submit" value="Add Genre" class="addBTN">
     </form>
 
-    <h1>Add Review</h1>
-
-    <form id="addReviewForm">
+    <form id="addReviewForm" class="forms">
+        <h1>Add Review</h1>
         <label for="is_positive">Review Status:</label>
         <select id="is_positive" name="is_positive" required>
             <option value="positive">Positive</option>
@@ -84,12 +79,11 @@
         <label for="game_id">Game ID:</label>
         <input type="number" id="game_id" name="game_id" required><br><br>
 
-        <input type="submit" value="Add Review">
+        <input type="submit" value="Add Review" class="addBTN">
     </form>
 
-    <h1>Add Restriction</h1>
-
-    <form id="addRestrictionForm">
+    <form id="addRestrictionForm" class="forms">
+        <h1>Add Restriction</h1>
         <label for="restriction_value">Restriction Value:</label>
         <select id="restriction_value" name="restriction_value" required>
             <option value="0">0</option>
@@ -103,19 +97,18 @@
         <label for="game_id">Game ID:</label>
         <input type="number" id="game_id" name="game_id" required><br><br>
 
-        <input type="submit" value="Add Restriction">
+        <input type="submit" value="Add Restriction" class="addBTN">
     </form>
 
-    <h1>Add Controller Support</h1>
-
-    <form id="addControllerSupportForm">
+    <form id="addControllerSupportForm" class="forms">
+        <h1>Add Controller Support</h1>
         <label for="supports_controller">Controller Support:</label>
         <input type="text" id="supports_controller" name="supports_controller" required><br><br>
 
         <label for="game_id">Game ID:</label>
         <input type="number" id="game_id" name="game_id" required><br><br>
 
-        <input type="submit" value="Add Controller Support">
+        <input type="submit" value="Add Controller Support" class="addBTN">
     </form>
 
     <script src="addControllerSupport.js"></script>

@@ -19,8 +19,57 @@ app.delete('/remove/:id', (req, res) => {
             return;
         }
 
-        console.log(`Data with ID ${id} has been successfully removed`);
-        res.sendStatus(200);
+        db.run('DELETE FROM Publisher WHERE id = ?', id, function(err) {
+            if (err) {
+                console.error(err.message);
+                res.status(500).json({ error: 'Internal Server Error' });
+                return;
+            }
+            db.run('DELETE FROM Developer WHERE id = ?', id, function(err) {
+                if (err) {
+                    console.error(err.message);
+                    res.status(500).json({ error: 'Internal Server Error' });
+                    return;
+                }
+                db.run('DELETE FROM Publisher WHERE id = ?', id, function(err) {
+                    if (err) {
+                        console.error(err.message);
+                        res.status(500).json({ error: 'Internal Server Error' });
+                        return;
+                    }
+                    db.run('DELETE FROM Genre WHERE id = ?', id, function(err) {
+                        if (err) {
+                            console.error(err.message);
+                            res.status(500).json({ error: 'Internal Server Error' });
+                            return;
+                        }
+                        db.run('DELETE FROM Reviews WHERE id = ?', id, function(err) {
+                            if (err) {
+                                console.error(err.message);
+                                res.status(500).json({ error: 'Internal Server Error' });
+                                return;
+                            }
+                            db.run('DELETE FROM Restriction WHERE id = ?', id, function(err) {
+                                if (err) {
+                                    console.error(err.message);
+                                    res.status(500).json({ error: 'Internal Server Error' });
+                                    return;
+                                }
+                                db.run('DELETE FROM ControllerSupport WHERE id = ?', id, function(err) {
+                                    if (err) {
+                                        console.error(err.message);
+                                        res.status(500).json({ error: 'Internal Server Error' });
+                                        return;
+                                    }
+                                console.log(`Data with ID ${id} has been successfully removed`);
+                                res.sendStatus(200);
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
     });
 });
 

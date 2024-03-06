@@ -18,10 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
         data.games.forEach(item => {
             const listItem = document.createElement('li');
             listItem.innerHTML = `
+                <button class="remove-btn" data-id="${item.id}">Remove</button>
                 <span>Name: ${item.game_name}</span>
                 <span>Released: ${item.released}</span>
                 <span>Price: ${item.price_value}</span>
-                <button class="remove-btn" data-id="${item.id}">Remove</button>
             `;
             dataList.appendChild(listItem);
         });
