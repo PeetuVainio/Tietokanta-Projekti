@@ -24,6 +24,159 @@ app.delete('/remove/:id', (req, res) => {
     });
 });
 
+app.post('/add', (req, res) => {
+    const formData = req.body;
+
+    if (!formData.game_name || !formData.released || !formData.price_value || !formData.publisher_id) {
+        res.status(400).json({ error: 'All fields are required' });
+        return;
+    }
+
+    db.run('INSERT INTO Game (game_name, released, price_value, publisher_id) VALUES (?, ?, ?, ?)', 
+    [formData.game_name, formData.released, formData.price_value, formData.publisher_id], 
+    function(err) {
+        if (err) {
+            console.error(err.message);
+            res.status(500).json({ error: 'Internal Server Error' });
+            return;
+        }
+
+        console.log(`Data has been successfully added with ID ${this.lastID}`);
+        res.sendStatus(200);
+    });
+});
+
+app.post('/add/publisher', (req, res) => {
+    const formData = req.body;
+
+    if (!formData.publisher_name || !formData.publisher_id) {
+        res.status(400).json({ error: 'All fields are required' });
+        return;
+    }
+
+    db.run('INSERT INTO Publisher (publisher_name, id) VALUES (?, ?)', 
+    [formData.publisher_name, formData.publisher_id], 
+    function(err) {
+        if (err) {
+            console.error(err.message);
+            res.status(500).json({ error: 'Internal Server Error' });
+            return;
+        }
+
+        console.log(`Publisher added with ID: ${this.lastID}`);
+        res.sendStatus(200);
+    });
+});
+
+app.post('/add/developer', (req, res) => {
+    const formData = req.body;
+
+    if (!formData.developer_name || !formData.game_id) {
+        res.status(400).json({ error: 'All fields are required' });
+        return;
+    }
+
+    db.run('INSERT INTO Developer (developer_name, game_id) VALUES (?, ?)', 
+    [formData.developer_name, formData.game_id], 
+    function(err) {
+        if (err) {
+            console.error(err.message);
+            res.status(500).json({ error: 'Internal Server Error' });
+            return;
+        }
+
+        console.log(`Developer has been successfully added with ID ${this.lastID}`);
+        res.sendStatus(200);
+    });
+});
+
+app.post('/addGenre', (req, res) => {
+    const formData = req.body;
+
+    if (!formData.genre_name || !formData.game_id) {
+        res.status(400).json({ error: 'All fields are required' });
+        return;
+    }
+
+    db.run('INSERT INTO Genre (genre_name, game_id) VALUES (?, ?)',
+        [formData.genre_name, formData.game_id],
+        function (err) {
+            if (err) {
+                console.error(err.message);
+                res.status(500).json({ error: 'Internal Server Error' });
+                return;
+            }
+
+            console.log(`Genre has been successfully added with ID ${this.lastID}`);
+            res.sendStatus(200);
+        });
+});
+
+app.post('/addReview', (req, res) => {
+    const formData = req.body;
+
+    if (!formData.is_positive || !formData.game_id) {
+        res.status(400).json({ error: 'All fields are required' });
+        return;
+    }
+
+    db.run('INSERT INTO Reviews (is_positive, game_id) VALUES (?, ?)',
+        [formData.is_positive, formData.game_id],
+        function (err) {
+            if (err) {
+                console.error(err.message);
+                res.status(500).json({ error: 'Internal Server Error' });
+                return;
+            }
+
+            console.log(`Review has been successfully added with ID ${this.lastID}`);
+            res.sendStatus(200);
+        });
+});
+
+app.post('/addRestriction', (req, res) => {
+    const formData = req.body;
+
+    if (!formData.restriction_value || !formData.game_id) {
+        res.status(400).json({ error: 'All fields are required' });
+        return;
+    }
+
+    db.run('INSERT INTO Restriction (restriction_value, game_id) VALUES (?, ?)',
+        [formData.restriction_value, formData.game_id],
+        function (err) {
+            if (err) {
+                console.error(err.message);
+                res.status(500).json({ error: 'Internal Server Error' });
+                return;
+            }
+
+            console.log(`Restriction has been successfully added with ID ${this.lastID}`);
+            res.sendStatus(200);
+        });
+});
+
+app.post('/addControllerSupport', (req, res) => {
+    const formData = req.body;
+
+    if (!formData.supports_controller || !formData.game_id) {
+        res.status(400).json({ error: 'All fields are required' });
+        return;
+    }
+
+    db.run('INSERT INTO ControllerSupport (supports_controller, game_id) VALUES (?, ?)',
+        [formData.supports_controller, formData.game_id],
+        function (err) {
+            if (err) {
+                console.error(err.message);
+                res.status(500).json({ error: 'Internal Server Error' });
+                return;
+            }
+
+            console.log(`Controller support has been successfully added with ID ${this.lastID}`);
+            res.sendStatus(200);
+        });
+});
 
 app.post('/search', (req, res) => {
     const searchParams = req.body;
