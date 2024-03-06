@@ -4,6 +4,8 @@ document.getElementById('addForm').addEventListener('submit', async function(eve
     const formData = new FormData(this);
     const formDataJSON = {};
 
+    formData.set('price_value', parseFloat(formData.get('price_value').replace(/[^0-9.,]/g, '').replace(',', '.')));
+
     formData.forEach((value, key) => {
         formDataJSON[key] = value;
     });

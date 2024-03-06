@@ -31,39 +31,32 @@ app.delete('/remove/:id', (req, res) => {
                     res.status(500).json({ error: 'Internal Server Error' });
                     return;
                 }
-                db.run('DELETE FROM Publisher WHERE id = ?', id, function(err) {
+                db.run('DELETE FROM Genre WHERE id = ?', id, function(err) {
                     if (err) {
                         console.error(err.message);
                         res.status(500).json({ error: 'Internal Server Error' });
                         return;
                     }
-                    db.run('DELETE FROM Genre WHERE id = ?', id, function(err) {
+                    db.run('DELETE FROM Reviews WHERE id = ?', id, function(err) {
                         if (err) {
                             console.error(err.message);
                             res.status(500).json({ error: 'Internal Server Error' });
                             return;
                         }
-                        db.run('DELETE FROM Reviews WHERE id = ?', id, function(err) {
+                        db.run('DELETE FROM Restriction WHERE id = ?', id, function(err) {
                             if (err) {
                                 console.error(err.message);
                                 res.status(500).json({ error: 'Internal Server Error' });
                                 return;
                             }
-                            db.run('DELETE FROM Restriction WHERE id = ?', id, function(err) {
+                            db.run('DELETE FROM ControllerSupport WHERE id = ?', id, function(err) {
                                 if (err) {
                                     console.error(err.message);
                                     res.status(500).json({ error: 'Internal Server Error' });
                                     return;
                                 }
-                                db.run('DELETE FROM ControllerSupport WHERE id = ?', id, function(err) {
-                                    if (err) {
-                                        console.error(err.message);
-                                        res.status(500).json({ error: 'Internal Server Error' });
-                                        return;
-                                    }
-                                console.log(`Data with ID ${id} has been successfully removed`);
-                                res.sendStatus(200);
-                                });
+                            console.log(`Data with ID ${id} has been successfully removed`);
+                            res.sendStatus(200);
                             });
                         });
                     });
@@ -260,8 +253,8 @@ app.post('/search', (req, res) => {
         queryParams.push(searchParams.developer_name);
     }
     if (searchParams.genre_name) {
-        query += ' AND g.id IN (SELECT game_id FROM Genre WHERE genre_name = ?)';
-        queryParams.push(searchParams.genre_name);
+        query += ' AND g.id IN (SELECT game_id FROM Genre WHERE genre_name LIKE ?)';
+        queryParams.push(`%${searchParams.genre_name}%`);
     }
     if (searchParams.review) {
         query += ' AND r.is_positive = ?';
